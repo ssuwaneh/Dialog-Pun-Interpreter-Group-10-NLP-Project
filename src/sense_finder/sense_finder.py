@@ -1,3 +1,12 @@
+"""
+LIMITATION: WordNet indexes senses by individual words, so phrasal verbs 
+and idioms (e.g. "put down", "give up") are missed entirely. The pun in
+"impossible to put down" relies on the idiomatic sense of "put down" 
+(to stop reading) vs. the literal sense (to place downward), but since
+"put" and "down" are tokenized separately, neither word alone carries 
+the idiomatic meaning.
+"""
+
 import nltk
 import spacy
 from sentence_transformers import SentenceTransformer, util
