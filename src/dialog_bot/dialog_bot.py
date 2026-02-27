@@ -2,8 +2,9 @@
 # get one at https://aistudio.google.com/apikey
 import os
 from google import genai
-from sense_finder import find_senses
-from context_validator import validate_context
+# Correct imports for your current structure
+from sense_finder.sense_finder import find_senses
+from context_validator.context_validator import validate_context
 
 client = genai.Client(api_key=os.environ.get("GEMINI_API_KEY", ""))
 MODEL = "gemini-2.5-flash"
