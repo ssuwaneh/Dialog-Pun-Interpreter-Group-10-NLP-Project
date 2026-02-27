@@ -3,3 +3,4 @@ google-genai
 nltk
 spacy
 sentence-transformers
+py -m spacy download en_core_web_sm
