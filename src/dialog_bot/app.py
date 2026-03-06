@@ -1,6 +1,13 @@
 # run with: python app.py
 
+import sys
+import os
 import gradio as gr
+
+# Add src folder to Python path so sibling modules can be imported
+sys.path.append(os.path.dirname(__file__))
+
+# imports from your modules
 from dialog_bot import analyze_pun, chat
 
 current_analysis = {}
@@ -15,12 +22,12 @@ EXAMPLE_PUNS = [
 
 
 def to_pairs(history):
-    # gradio stores messages as dicts, but the LLM chat function expects (user, bot) tuples
+    """Convert Gradio history dicts into (user, bot) tuples."""
     pairs = []
     i = 0
     while i < len(history) - 1:
-        if history[i]["role"] == "user" and history[i+1]["role"] == "assistant":
-            pairs.append((history[i]["content"], history[i+1]["content"]))
+        if history[i]["role"] == "user" and history[i + 1]["role"] == "assistant":
+            pairs.append((history[i]["content"], history[i + 1]["content"]))
             i += 2
         else:
             i += 1
@@ -28,6 +35,7 @@ def to_pairs(history):
 
 
 def set_pun(sentence):
+    """Analyze pun sentence and return summary."""
     global current_analysis, current_sentence
     current_sentence = sentence
     current_analysis = analyze_pun(sentence)
@@ -40,6 +48,7 @@ def set_pun(sentence):
 
 
 def respond(question, history):
+    """Generate chatbot response."""
     if not current_analysis:
         msg = "Please enter a pun sentence first (above) and click Analyze."
         history = history + [{"role": "user", "content": question},
@@ -75,7 +84,7 @@ with gr.Blocks(title="Pun Interpreter - Group 10") as demo:
                                scale=4)
         send_btn = gr.Button("Send", variant="primary", scale=1)
 
-    # hook up buttons
+    # Hook up buttons
     analyze_btn.click(fn=set_pun, inputs=[pun_input],
                       outputs=[analysis_display, state, chatbot])
 
