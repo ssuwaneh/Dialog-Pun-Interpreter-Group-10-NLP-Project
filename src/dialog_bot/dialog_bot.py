@@ -1,16 +1,28 @@
+# dialog_bot.py
 # requires GEMINI_API_KEY environment variable to be set
 # get one at https://aistudio.google.com/apikey
+
 import os
 from google import genai
-# Correct imports for your current structure
+
+# Add src folder to Python path so sibling modules can be imported
+import sys
+sys.path.append(os.path.dirname(os.path.dirname(__file__)))
+
 from sense_finder.sense_finder import find_senses
 from context_validator.context_validator import validate_context
 
-client = genai.Client(api_key=os.environ.get("GEMINI_API_KEY", ""))
+# Gemini client setup
+API_KEY = os.environ.get("GEMINI_API_KEY", "")
+if not API_KEY:
+    raise EnvironmentError("GEMINI_API_KEY environment variable is not set")
+client = genai.Client(api_key=API_KEY)
+
 MODEL = "gemini-2.5-flash"
 
 
 def analyze_pun(sentence):
+    """Analyze pun sentence using sense finder and context validator."""
     senses = find_senses(sentence)
     validation = validate_context(
         sentence, senses["pun_word"], senses["sense_a"], senses["sense_b"]
@@ -19,6 +31,7 @@ def analyze_pun(sentence):
 
 
 def build_system_prompt(sentence, analysis):
+    """Build the system prompt for the chat model."""
     return f"""You explain puns to people. Here's one that's been analyzed:
 
 The sentence is: "{sentence}"
@@ -35,6 +48,7 @@ If they ask something off-topic just bring it back to the pun."""
 
 
 def chat(sentence, question, history, analysis):
+    """Generate conversational response about a pun."""
     system_prompt = build_system_prompt(sentence, analysis)
 
     # seed the conversation with the system prompt as a fake user/model exchange
