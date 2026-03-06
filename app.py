@@ -1,5 +1,10 @@
 import gradio as gr
 from dialog_bot import analyze_pun, extract_pun_word, validate_context, chat
+import sys
+import os
+
+# Add src folder to Python path
+sys.path.append(os.path.join(os.path.dirname(__file__), "src"))
 
 current_analysis = {}
 current_sentence = ""
