@@ -1,5 +1,0 @@
-gradio
-google-genai
-nltk
-spacy
-sentence-transformers
