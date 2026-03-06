@@ -1,6 +1,6 @@
 import gradio as gr
 from dialog_bot import analyze_pun, extract_pun_word, validate_context, chat
-from pun_detector.detector import is_pun, get_pun_word
+from pun_detector.pun_detector import is_pun, get_pun_word
 import sys
 import os
 
